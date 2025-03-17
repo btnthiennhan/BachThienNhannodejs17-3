@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 let userController = require('../controllers/users');
-const { check_authentication } = require('../Utils/check_auth');
+const constants = require('../Utils/constants');
+const { check_authentication, check_authorization } = require('../Utils/check_auth');
+
+
 
 router.post('/signup', async function(req, res, next) {
     try {
@@ -20,7 +23,7 @@ router.post('/signup', async function(req, res, next) {
         next(error);
       }
 
-});
+})
 router.post('/login', async function(req, res, next) {
     try {
         let username = req.body.username;
@@ -34,7 +37,7 @@ router.post('/login', async function(req, res, next) {
         next(error);
       }
 
-});
+})
 router.get('/me',check_authentication, async function(req, res, next){
     try {
       res.status(200).send({
@@ -44,7 +47,7 @@ router.get('/me',check_authentication, async function(req, res, next){
     } catch (error) {
         next();
     }
-});
+})
 router.get('/resetPassword/:id', 
   check_authentication,
   check_authorization(constants.ADMIN_PERMISSION),
